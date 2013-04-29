@@ -1,4 +1,4 @@
 rt.commands
 ===========
 
-deployment commands for RT (mainly fabric)
+deployment commands for RT (mainly fabric scripts)
