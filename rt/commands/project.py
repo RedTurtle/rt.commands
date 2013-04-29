@@ -47,3 +47,21 @@ def run_buildout(buildout_cfg=None):
 
     with cd('/opt/%(project_name)s' % opts):
         sudo('bin/buildout -c %(buildout_cfg)s' % opts)
+
+
+def install_init():
+    """Install debian-based init script"""
+    
+    opts = dict(
+        project_name=env.get('project_name') or _err('project_name missing'),
+    )
+    sudo('cp /opt/%(project_name)s/etc/initscript /etc/init.d/%(project_name)s' % opts)
+    sudo('update-rc.d %(project_name)s defaults' % opts)
+
+
+def deploy():
+    """1. Prepare buildout, 2. Run buildout, 3. Install init"""
+    prepare_buildout()
+    run_buildout()
+    install_init()
+
