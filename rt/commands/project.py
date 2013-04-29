@@ -2,6 +2,7 @@ from fabric.api import cd
 from fabric.api import env
 from fabric.api import sudo
 from rt.commands import _err
+from rt.commands.buildout_components import _prepare_cmp_buildout, _run_cmp_buildout
 
 
 def staging():
@@ -20,6 +21,10 @@ def prepare_buildout(buildout_cfg=None, buildout_repo=None):
     """Prepare zc.buildout environment so we can use
     ``bin/buildout -c production.cfg`` to build a production environment.
     """
+    if hasattr(env, 'component'):
+        _prepare_cmp_buildout(env.component, buildout_cfg=buildout_cfg)
+        return
+
     opts = dict(
         project_name=env.get('project_name') or _err('project_name missing'),
         buildout_repo=buildout_repo or env.get('buildout_repo'),
@@ -40,6 +45,10 @@ def run_buildout(buildout_cfg=None):
     """Run ``bin/buildout -c production.cfg`` in production folder
     on the production server.
     """
+    if hasattr(env, 'component'):
+        _run_cmp_buildout(env.component)
+        return
+
     opts = dict(
         project_name=env.get('project_name') or _err('project_name missing'),
         buildout_cfg=buildout_cfg or env.get('buildout_cfg') or 'buildout.cfg',
