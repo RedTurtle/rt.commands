@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 from fabric.api import cd
 from fabric.api import env
+from fabric.api import lcd
+from fabric.api import local
 from fabric.api import run
-from fabric.api import local, lcd
 from fabric.context_managers import quiet
 from fabric.contrib import console
+from rt.commands.components import plone
 
 
 def supervisor(action='status'):
@@ -29,7 +32,7 @@ def component_buildout(components='*', profile='production.cfg'):
         components = [components]
 
     for component in components:
-        opts = {'component_dir': '%s/components/%s' % (local_buildout,component),
+        opts = {'component_dir': '%s/components/%s' % (local_buildout, component),
                 'profile' : profile}
         if not console.confirm("Do you want to launch buildout in %(component_dir)s" % opts):
             continue
@@ -41,3 +44,18 @@ def component_buildout(components='*', profile='production.cfg'):
             local('../../bin/python bootstrap.py')
             # run buildout
             local('./bin/buildout -N')
+
+
+def install_crontab(components='*'):
+    '''
+    Install crontab for components
+    '''
+    return plone.install_crontab()
+
+
+def install_logrotate(components='*'):
+    '''
+    Install logrotate for components
+    '''
+    return plone.install_logrotate()
+
