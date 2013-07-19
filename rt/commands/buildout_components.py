@@ -19,8 +19,7 @@ def sync_var(component='plone'):
     local(cmd)
 
 def run_buildout(buildout_cfg='buildout.cfg', component='plone'):
-    """Run ``bin/buildout -c production.cfg`` in production folder
-    on the production server.
+    """Run remotely ``bin/buildout -c ${buildout_cfg}`` in component folder.
     """
     opts = env.copy()
     opts['buildout_cfg'] = buildout_cfg
