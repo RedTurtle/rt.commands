@@ -5,15 +5,20 @@ def _err(msg):
     raise AttributeError(msg)
 
 
+def _set_target(target_type):
+    """Set host to staging"""
+    env.hosts = [env.get('%s_host' % target_type)
+                 or _err('%s need to be set' % '%s_host' % target_type)]
+    env.user = env.get('%s_user' % target_type) or 'plone'
+    env.code_dir = (env.get('%s_dir' % target_type)
+                    or _err('%s_dir need to be set' % target_type))
+
+
 def staging():
     """Set host to staging"""
-    env.hosts = [env.get('staging_host')] or _err('staging_host need to be set')
-    env.user = env.get('staging_user') or 'plone'
-    env.code_dir = env.get('staging_dir') or _err('staging_dir need to be set')
+    _set_target('staging')
 
 
 def production():
     """Set host to production"""
-    env.hosts = [env.get('production_host')] or _err('production_host need to be set')
-    env.user = env.get('production_user') or 'plone'
-    env.code_dir = env.get('production_dir') or _err('production_dir need to be set')
+    _set_target('production')
