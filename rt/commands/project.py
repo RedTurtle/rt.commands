@@ -15,7 +15,7 @@ def supervisor(action='status'):
         run('./bin/supervisorctl %(action)s' % opts)
 
 
-def deploy_buildout(components='*', profile='production.cfg'):
+def component_buildout(components='*', profile='production.cfg'):
     """Deploy local production ${components} buildouts"""
     # if we get asterix - iterate on all commands
     with quiet():
