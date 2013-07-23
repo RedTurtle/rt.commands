@@ -15,8 +15,14 @@ def sync_var(component='plone'):
         opts['local_buildout'] = local('pwd', capture=True) + '/var/'
 
     opts['component'] = 'components/%s/var/' % component
-    cmd = 'rsync --exclude \'log\' --exclude \'*.old\' -Pthrvz %(user)s@%(host)s:%(code_dir)s/%(component)s %(local_buildout)s' % opts
+    opts['short_options'] = '-Pthrvz'
+    opts['exclude'] = ' '.join(["--exclude='%s'" % x
+                                for x in ('log', '*.old', '.svn')])
+    cmd = ("rsync %(exclude)s %(short_options)s "
+           "%(user)s@%(host)s:%(code_dir)s/%(component)s %(local_buildout)s"
+           ) % opts
     local(cmd)
+
 
 def run_buildout(buildout_cfg='buildout.cfg', component='plone'):
     """Run remotely ``bin/buildout -c ${buildout_cfg}`` in component folder.
