@@ -7,18 +7,18 @@ setup(name='rt.commands',
       description="Fabric scripts for RT",
       long_description="""\
 """,
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      classifiers=[],
       keywords='',
       author='RedTurtle developers',
       author_email='sviluppo@redturtle.it',
       url='http://www.redturtle.it',
       license='GPL',
-      packages=find_packages(exclude=['ez_setup',]),
+      packages=find_packages(exclude=['ez_setup', ]),
       include_package_data=True,
       namespace_packages=['rt'],
       zip_safe=False,
       install_requires=[
-#          'fabric'
+          # 'fabric'
       ],
       entry_points="""
       # -*- Entry points: -*-

@@ -33,9 +33,11 @@ def component_buildout(components='*', profile='production.cfg'):
         components = [components]
 
     for component in components:
-        opts = {'component_dir': '%s/components/%s' % (local_buildout, component),
+        opts = {'component_dir': '%s/components/%s' % (local_buildout,
+                                                       component),
                 'profile': profile}
-        if not console.confirm("Do you want to launch buildout in %(component_dir)s" % opts):
+        if not console.confirm("Do you want to launch "
+                               "buildout in %(component_dir)s" % opts):
             continue
 
         with lcd('%(component_dir)s' % opts):
