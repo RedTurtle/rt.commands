@@ -5,7 +5,7 @@ rt.commands fabric stuff
 import os
 from setuptools import setup, find_packages
 
-version = '0.1.3'
+version = '0.1.4.dev0'
 
 def read(*rnames):
             return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
