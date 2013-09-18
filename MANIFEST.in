@@ -1,2 +1,3 @@
 recursive-include rt *
 global-exclude *.pyc
+include *.rst

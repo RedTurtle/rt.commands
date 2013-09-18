@@ -1,12 +1,26 @@
+# -*- coding: utf-8 -*-
+"""
+This module contains the tool of rer.bur
+"""
+import os
 from setuptools import setup, find_packages
 
 version = '0.1.3.dev0'
 
+def read(*rnames):
+            return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+
+long_description = (
+    read('README.rst')
+    + '\n' +
+    read('CHANGELOG.rst')
+    + '\n'
+    )
+
 setup(name='rt.commands',
       version=version,
       description="Fabric scripts for RT",
-      long_description="""\
-""",
+      long_description=long_description,
       classifiers=[],
       keywords='',
       author='RedTurtle developers',
