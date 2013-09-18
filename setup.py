@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-This module contains the tool of rer.bur
+rt.commands fabric stuff
 """
 import os
 from setuptools import setup, find_packages
