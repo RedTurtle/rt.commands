@@ -24,6 +24,7 @@ def component_buildout(components='*', profile='production.cfg'):
     # if we get asterix - iterate on all commands
     with quiet():
         local_buildout = local('pwd', capture=True)
+
     if components == '*':
         with quiet():
             with lcd('components'):
@@ -42,8 +43,7 @@ def component_buildout(components='*', profile='production.cfg'):
 
         with lcd('%(component_dir)s' % opts):
             # symlink profile
-            if not os.path.exists('buildout.cfg'):
-                local('ln -s ./profiles/%(profile)s buildout.cfg' % opts)
+            local('test -f buildout.cfg || ln -s ./profiles/%(profile)s buildout.cfg' % opts)
             # bootstrap
             local('../../bin/python bootstrap.py')
             # run buildout
