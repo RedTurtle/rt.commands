@@ -43,7 +43,7 @@ def component_buildout(components='*', profile='production.cfg'):
 
         with lcd('%(component_dir)s' % opts):
             # symlink profile
-            local('test -f buildout.cfg || ln -s ./profiles/%(profile)s buildout.cfg' % opts)
+            local('test -f buildout.cfg || ln -s ./profiles/%(profile)s buildout.cfg' % opts)  # noqa
             # bootstrap
             local('../../bin/python bootstrap.py')
             # run buildout
@@ -62,3 +62,15 @@ def install_logrotate(components='*'):
     Install logrotate for components
     '''
     return plone.install_logrotate()
+
+
+def _isuptodate(folder_path='.'):
+    ''' Check if folder_path is up to date
+    '''
+    with lcd(folder_path):
+        if os.path.exists('%s/.git' % folder_path):
+            local('git --no-pager status')
+            local('git --no-pager diff origin/master')
+        if os.path.exists('%s/.svn' % folder_path):
+            local('svn status')
+            local('svn diff -rHEAD')
