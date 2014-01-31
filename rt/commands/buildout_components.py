@@ -4,17 +4,22 @@ from fabric.api import env
 from fabric.api import cd
 from fabric.api import run
 from fabric.network import needs_host, normalize
+import os
 
 
 @needs_host
 def sync_var(component='plone'):
-    """Sync component's buildout var folder"""
+    """Sync component's buildout var folder
+
+    :params component: a string specify the component or ".." to sync the var
+                       at the root of the buildout
+    """
     user, host, port = normalize(env.host_string)
     opts = env.copy()
     with quiet():
         opts['local_buildout'] = local('pwd', capture=True) + '/var/'
 
-    opts['component'] = 'components/%s/var/' % component
+    opts['component'] = os.path.normpath('components/%s/var/' % component)
     opts['short_options'] = '-Pthrvz'
     opts['exclude'] = ' '.join(["--exclude='%s'" % x
                                 for x in ('log', '*.old', '.svn')])

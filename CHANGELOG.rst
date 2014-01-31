@@ -4,7 +4,10 @@ Changelog
 0.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- started writing some documentation
+- sync_var now handles '..'
+- added _isuptodate function
+  [ale-rt]
 
 
 0.1.4 (2013-10-10)
