@@ -4,6 +4,7 @@ Changelog
 0.1.5 (unreleased)
 ------------------
 
+- added sync_filestorage and sync_blobstorage functions for plone component
 - started writing some documentation
 - sync_var now handles '..'
 - added _isuptodate function
