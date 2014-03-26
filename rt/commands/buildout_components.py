@@ -8,6 +8,20 @@ import os
 
 
 @needs_host
+def tail_log(component='', glob='*.log'):
+    """Tail the log in the component folder
+    """
+    opts = env.copy()
+    opts['glob'] = glob
+    if component:
+        opts['component'] = 'components/%s' % component
+    else:
+        opts['component'] = component
+
+    cmd = ("tail -f %(code_dir)s/%(component)s/var/log/%(glob)s" % opts)
+    run(cmd)
+
+@needs_host
 def sync_var(component='plone'):
     """Sync component's buildout var folder
 
