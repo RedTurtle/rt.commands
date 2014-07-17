@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.1.5 (unreleased)
+0.1.5 (2014-07-17)
 ------------------
 
 - added sync_filestorage and sync_blobstorage functions for plone component
