@@ -9,28 +9,26 @@ Your fabfile
 To use rt.commands import it in your fabfile and
 set some environment variables.
 
-For example, you can start from this template::
+For example, you can start from this template:: python
 
     # this is necessary to make the fabric commands available
-    from fabric.api import env
-    from rt.commands import *
-    from rt.commands.project import *
-    from rt.commands.buildout_components import *
+    from rt.commands import _set_target
+    from rt.commands.components.plone import buildout  # noqa
+    from rt.commands.components.plone import develop  # noqa
+    from rt.commands.components.plone import pull_buildout  # noqa
+    from rt.commands.components.plone import supervisorctl  # noqa
+    from rt.commands.components.plone import sync_blobstorage  # noqa
+    from rt.commands.components.plone import sync_filestorage  # noqa
 
-    # This is the main python version
-    env.python_version = '2.7'
 
-    # This is the buildout script to use
-    env.buildout_cfg = 'buildout.cfg'
-
-    # And some hosts
-    env.staging_user = 'plone'
-    env.staging_host = 'staging.example.com'
-    env.staging_dir = '/opt/www.demo.example.com'
-    env.production_user = 'plone'
-    env.production_host = 'example.com'
-    env.production_dir = '/opt/www.example.com'
-
+    def staging():
+        ''' Prepare host
+        '''
+        _set_target(
+            user='redturtle',
+            host='127.0.0.1',
+            path='/opt/www.redturtle.it/components/plone/'
+        )
 
 rt.commands
 -----------
@@ -59,7 +57,8 @@ Given this fabfile::
     # -*- coding: utf-8 -*-
     from fabric.api import env
     from rt.commands import production, staging
-    from rt.commands.components.plone import sync_blobstorage, sync_filestorage
+    from rt.commands.components.plone import sync_blobstorage
+    from rt.commands.components.plone import sync_filestorage
 
     env.staging_user = 'redturtle'
     env.staging_host = 'somehost.redturtle.it'

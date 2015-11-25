@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from fabric.api import env
+from fabric import api
 from fabric.contrib.console import confirm
 from fabric.network import needs_host, normalize
 from fabric.operations import local
@@ -59,6 +59,68 @@ def install_logrotate(force=''):
     install_file(source, target, force)
 
 
+def _base_path(component=''):
+    ''' Return the base path for this host
+    '''
+    return os.path.join(
+        api.env.paths[api.env.host_string],
+        component
+    )
+
+
+def _buildout_path():
+    ''' Return the base path for this host
+    '''
+    return os.path.join(_base_path(), '../../bin/buildout')
+
+
+def _develop_path():
+    ''' Return the base path for this host
+    '''
+    return os.path.join(_base_path(), 'bin/develop')
+
+
+def _supervisorctl_path():
+    ''' Return the base path for the supervisorctl executabel
+    '''
+    return os.path.join(_base_path(), '../../bin/supervisorctl')
+
+
+def pull_buildout(component=''):
+    ''' Update the buildout
+    '''
+    with api.cd(_base_path(component)):
+        api.run('git fetch')
+        api.run('git diff origin/master')
+        api.run('git pull')
+
+
+def buildout(component=''):
+    if component and not component.startswith('components'):
+        component = 'components/%s' % component
+
+    with api.cd(_base_path(component)):
+        api.run('{buildout} -Nt 2'.format(
+            buildout=_buildout_path(),
+        ))
+
+
+def develop(params='rb'):
+    with api.cd(_base_path()):
+        api.run('{develop} {params}'.format(
+            develop=_develop_path(),
+            params=params,
+        ))
+
+
+def supervisorctl(params='status'):
+    with api.cd(_base_path()):
+        api.run('{supervisorctl} {params}'.format(
+            supervisorctl=_supervisorctl_path(),
+            params=params,
+        ))
+
+
 @needs_host
 def _sync_path(relative_path='', exclude=''):
     ''' Syncs a remote path to a local folder
@@ -67,19 +129,18 @@ def _sync_path(relative_path='', exclude=''):
      - locally to the current working directory
      - remotely to the production_dir found in env
     '''
-    normalize(env.host_string)
+    normalize(api.env.host_string)
     local_path = os.path.normpath(os.path.join(os.getcwd(), relative_path))
     remote_path = os.path.normpath(
         os.path.join(
-            env['code_dir'], 'components/plone', relative_path
+            _base_path(), relative_path
         )
     )
-    cmd = "rsync -Pthrz %(user)s@%(host)s:%(remote_path)s/ %(local_path)s/" % {
-        'user': env['user'],
-        'host': env['host'],
-        'local_path': local_path,
-        'remote_path': remote_path,
-    }
+    cmd = "rsync -Pthrz {host}:{remote_path}/ {local_path}/".format(
+        host=api.env.host_string,
+        local_path=local_path,
+        remote_path=remote_path,
+    )
     if exclude:
         cmd = "%s --exclude=%s" % (cmd, exclude)
     local(cmd)
