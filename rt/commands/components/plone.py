@@ -161,7 +161,7 @@ def _sync_path(relative_path='', exclude=''):
 
 @needs_host
 def sync_blobstorage(relative_path="var/blobstorage", exclude=""):
-    """Sync Plone var/filestorage folder from host to local
+    """Sync Plone var/blobstorage folder from host to local
     Default parameters:
     relative_path="var/blobstorage"
     exclude=""
