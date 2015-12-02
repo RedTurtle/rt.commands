@@ -86,8 +86,9 @@ def _supervisorctl_path():
     return os.path.join(_base_path(), '../../bin/supervisorctl')
 
 
+@needs_host
 def pull_buildout(component=''):
-    ''' Update the buildout
+    ''' Update the buildout on host
     '''
     with api.cd(_base_path(component)):
         api.run('git fetch')
@@ -95,17 +96,26 @@ def pull_buildout(component=''):
         api.run('git pull')
 
 
-def buildout(component=''):
+@needs_host
+def buildout(component='', params='-Nt 5'):
+    ''' Interface to the buildout script on host
+    (default parameter "-Nt 5")
+    '''
     if component and not component.startswith('components'):
         component = 'components/%s' % component
 
     with api.cd(_base_path(component)):
-        api.run('{buildout} -Nt 2'.format(
+        api.run('{buildout} {params}'.format(
             buildout=_buildout_path(),
+            params=params,
         ))
 
 
+@needs_host
 def develop(params='rb'):
+    ''' Interface to develop script installed by mr.developer
+    on host (default parameter 'rb')
+    '''
     with api.cd(_base_path()):
         api.run('{develop} {params}'.format(
             develop=_develop_path(),
@@ -113,7 +123,10 @@ def develop(params='rb'):
         ))
 
 
+@needs_host
 def supervisorctl(params='status'):
+    ''' Interface to supervisorctl on host
+    '''
     with api.cd(_base_path()):
         api.run('{supervisorctl} {params}'.format(
             supervisorctl=_supervisorctl_path(),
@@ -146,17 +159,22 @@ def _sync_path(relative_path='', exclude=''):
     local(cmd)
 
 
+@needs_host
 def sync_blobstorage(relative_path="var/blobstorage", exclude=""):
-    """Sync Plone var/filestorage folder
-
-    :params component: a string specify the component or ".." to sync the var
-                       at the root of the buildout
+    """Sync Plone var/filestorage folder from host to local
+    Default parameters:
+    relative_path="var/blobstorage"
+    exclude=""
     """
     return _sync_path(relative_path=relative_path, exclude=exclude)
 
 
+@needs_host
 def sync_filestorage(relative_path="var/filestorage", exclude="*.old"):
-    """Sync Plone var/filestorage folder
+    """Sync Plone var/filestorage folder from host to local
+    Default parameters:
+    relative_path="var/filestorage"
+    exclude="*.old"
 
     :params component: a string specify the component or ".." to sync the var
                        at the root of the buildout

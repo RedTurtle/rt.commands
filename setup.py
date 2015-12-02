@@ -7,8 +7,9 @@ from setuptools import setup, find_packages
 
 version = '0.1.6.dev0'
 
+
 def read(*rnames):
-            return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
 long_description = (
     read('README.rst')
@@ -32,7 +33,7 @@ setup(name='rt.commands',
       namespace_packages=['rt'],
       zip_safe=False,
       install_requires=[
-          # 'fabric'
+          'fabric'
       ],
       entry_points="""
       # -*- Entry points: -*-
